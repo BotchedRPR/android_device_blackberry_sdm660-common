@@ -30,21 +30,52 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := generic
 
-# 64-bit binder
-TARGET_USES_64_BIT_BINDER := true
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_BOARD_PLATFORM := sdm660
+
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+
+# Bootloader
+TARGET_NO_BOOTLOADER := true
+
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
+
+# A/B
+AB_OTA_PARTITIONS += \
+    boot \
+    system \
+    vendor
+
+AB_OTA_UPDATER := true
+
+# Audio
+AUDIO_FEATURE_ENABLED_EXTENDED_COMPRESS_FORMAT := true
+BOARD_SUPPORTS_SOUND_TRIGGER := true
+BOARD_USES_ALSA_AUDIO := true
+
+# HIDL
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
+    $(PLATFORM_PATH)/framework_compatibility_matrix.xml \
+    hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
+    hardware/qcom-caf/common/vendor_framework_compatibility_matrix_legacy.xml \
+    vendor/lineage/config/device_framework_matrix.xml
+DEVICE_MANIFEST_FILE += $(PLATFORM_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(PLATFORM_PATH)/compatibility_matrix.xml
+
+TARGET_FS_CONFIG_GEN := $(PLATFORM_PATH)/config.fs
 
 BOARD_KERNEL_CMDLINE := earlycon=msm_serial_dm,0xc170000 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 pathtrust=0 service_locator.enable=1 swiotlb=1 androidboot.configfs=true androidboot.usbcontroller=a800000.dwc3 build_number=ACT575 androidboot.build_number=ACT575 coherent_pool=1280K 
 BOARD_KERNEL_BASE := 0x0
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET     := 0x01000000
 BOARD_KERNEL_PAGESIZE := 4096
-TARGET_KERNEL_ARCH := arm64
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
+TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TARGET_KERNEL_CONFIG := luna-perf_defconfig
 TARGET_KERNEL_SOURCE := kernel/blackberry/sdm660
-
-# Bootloader
-TARGET_NO_BOOTLOADER := true
 
 # Audio
 USE_XML_AUDIO_POLICY_CONF := 1
@@ -61,25 +92,28 @@ endif
 TARGET_USES_HWC2 := true
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
+# Media
+TARGET_USES_ION := true
+
 # Properties
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 
 # Partitions
-BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 2147483648
-BOARD_FLASH_BLOCK_SIZE := 262144
-
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-
+BOARD_USES_SYSTEM_OTHER_ODEX := true
+BOARD_USES_RECOVERY_AS_BOOT := true
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+TARGET_COPY_OUT_PRODUCT := system/product
+TARGET_COPY_OUT_VENDOR := vendor
+TARGET_NO_RECOVERY := true
 TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
 # Recovery
-TARGET_NO_RECOVERY := true
-BOARD_USES_RECOVERY_AS_BOOT := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_DEVICE_DIRS += $(PLATFORM_PATH)
+TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+
+# RIL
+ENABLE_VENDOR_RIL_SERVICE := true
 
 # Root Directories
 BOARD_ROOT_EXTRA_SYMLINKS := \
@@ -88,14 +122,34 @@ BOARD_ROOT_EXTRA_SYMLINKS := \
     /vendor/dsp:/dsp \
     /vendor/firmware_mnt:/firmware
 
-# Sepolicy
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(COMMON_PATH)/sepolicy/private
+# SELinux
+include device/qcom/sepolicy-legacy-um/SEPolicy.mk
 
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR += device/qcom/sepolicy/private
-BOARD_PLAT_PUBLIC_SEPOLICY_DIR += device/qcom/sepolicy/public
+PRODUCT_PRIVATE_SEPOLICY_DIRS += $(PLATFORM_PATH)/sepolicy/private
+# BOARD_VENDOR_SEPOLICY_DIRS += $(PLATFORM_PATH)/sepolicy/vendor
 
-# Vendor
-TARGET_COPY_OUT_VENDOR := vendor
+# Vendor Security Patch Level
+VENDOR_SECURITY_PATCH := 2020-11-05
+
+# Verity
+# Only needed for signing
+BOARD_AVB_ENABLE := false
 
 # VNDK
 BOARD_VNDK_VERSION := current
+
+# Wifi
+BOARD_WLAN_DEVICE := qcwcn
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+WIFI_DRIVER_FW_PATH_AP  := "ap"
+WIFI_DRIVER_FW_PATH_P2P := "p2p"
+WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
+WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+
+# inherit from the proprietary version
+include vendor/blackberry/sdm660-common/BoardConfigVendor.mk
