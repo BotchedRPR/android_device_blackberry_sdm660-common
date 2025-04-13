@@ -84,11 +84,14 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-impl \
     android.hardware.boot@1.0-impl.recovery \
     android.hardware.boot@1.0-service \
-    bootctrl.sdm660 \
-    bootctrl.sdm660.recovery
+    bootctrl.sdm660
 
 PRODUCT_PACKAGES_DEBUG += \
     bootctl
+
+# CAS
+PRODUCT_PACKAGES += \
+    com.android.hardware.cas
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -99,7 +102,6 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.camera.device@1.0
 
 PRODUCT_PACKAGES += \
-    libshim_megvii \
     libgui_shim \
     libgui_shim_vendor
 
@@ -141,10 +143,6 @@ PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service \
     android.hardware.biometrics.fingerprint@2.1.vendor
 
-# Fast Charge HAL
-PRODUCT_PACKAGES += \
-    vendor.lineage.fastcharge@1.0-service.qcom
-
 # FM
 PRODUCT_PACKAGES += \
     FM2 \
@@ -180,6 +178,7 @@ PRODUCT_PACKAGES += \
 
 # HIDL
 PRODUCT_PACKAGES += \
+    android.hidl.allocator@1.0 \
     android.hidl.base@1.0 \
     android.hidl.base@1.0.vendor \
     android.hidl.manager@1.0 \
@@ -191,7 +190,7 @@ PRODUCT_PACKAGES += \
 
 # Init
 PRODUCT_PACKAGES += \
-    fstab.qcom\
+    fstab.qcom \
     fstab.qcom.ramdisk
 
 PRODUCT_PACKAGES += \
@@ -207,8 +206,7 @@ PRODUCT_PACKAGES += \
     init.qcom.early_boot.sh \
     init.qcom.post_boot.sh \
     init.qcom.sensors.sh \
-    init.qti.qseecomd.sh \
-    wlan_carrier_bin.sh
+    init.qti.qseecomd.sh
 
 # IPACM
 PRODUCT_PACKAGES += \
@@ -237,10 +235,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0.vendor
 
-# Lights
-PRODUCT_PACKAGES += \
-    android.hardware.light-service.sdm660
-
 # Lineage Health
 PRODUCT_PACKAGES += \
     vendor.lineage.health-service.default
@@ -248,6 +242,10 @@ PRODUCT_PACKAGES += \
 # LiveDisplay
 PRODUCT_PACKAGES += \
     vendor.lineage.livedisplay@2.0-service-sdm
+
+# Loggy
+PRODUCT_PACKAGES += \
+    loggy.sh
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -431,7 +429,6 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi-service \
     libwpa_client \
     hostapd \
-    WifiOverlay \
     wpa_supplicant \
     wpa_supplicant.conf
 
