@@ -16,14 +16,6 @@
         </interface>
     </hal>
     <hal format="hidl" optional="false">
-        <name>android.hidl.allocator</name>
-        <version>1.0</version>
-        <interface>
-            <name>IAllocator</name>
-            <instance>ashmem</instance>
-        </interface>
-    </hal>
-    <hal format="hidl" optional="false">
         <name>android.hidl.manager</name>
         <version>1.0</version>
         <interface>
@@ -55,4 +47,7 @@
             <instance>default</instance>
         </interface>
     </hal>
+    <vndk>
+        <version>0.0.0</version>
+    </vndk>
 </compatibility-matrix>
