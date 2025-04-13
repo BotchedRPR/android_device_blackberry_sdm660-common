@@ -1,0 +1,9 @@
+service loggy /vendor/bin/loggy.sh
+    class core
+    user root
+    oneshot
+
+on post-fs-data
+	write /dev/kmsg "STARTING LOGGY"
+	start loggy
+	write /dev/kmsg "LOGGY OK"

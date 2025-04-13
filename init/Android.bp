@@ -1,0 +1,12 @@
+prebuilt_etc {
+    name: "init.loggy.rc",
+    src: "init.loggy.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+sh_binary {
+    name: "loggy.sh",
+    src: "loggy.sh",
+    vendor: true,
+}
